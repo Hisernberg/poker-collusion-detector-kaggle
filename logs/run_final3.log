@@ -1,0 +1,27 @@
+================================================================================
+Building evidence submissions (numpy vectorized)
+================================================================================
+Needed players: 11,302
+hands_dict: 2,000,000
+Streaming seats.parquet via row groups...
+  rg 20/200: hands=199,995, pairs_w_ev=85,297, elapsed=43.3s
+  rg 40/200: hands=399,959, pairs_w_ev=105,260, elapsed=89.7s
+  rg 60/200: hands=599,958, pairs_w_ev=110,404, elapsed=136.7s
+  rg 80/200: hands=799,953, pairs_w_ev=111,883, elapsed=184.2s
+  rg 100/200: hands=999,953, pairs_w_ev=112,336, elapsed=232.2s
+  rg 120/200: hands=1,199,953, pairs_w_ev=112,478, elapsed=279.4s
+  rg 140/200: hands=1,399,942, pairs_w_ev=112,520, elapsed=329.8s
+  rg 160/200: hands=1,599,917, pairs_w_ev=112,535, elapsed=381.0s
+  rg 180/200: hands=1,799,917, pairs_w_ev=112,540, elapsed=431.7s
+  rg 200/200: hands=1,999,904, pairs_w_ev=112,540, elapsed=483.4s
+Done in 483.4s. Pairs with evidence: 112,540, hands: 1,999,904
+Building SUBMISSION A — Chip-transfer evidence
+Saved submission_A_evidence_chip_transfer.csv: (112540, 8)
+Building SUBMISSION B — Behavior-specific evidence
+Saved submission_B_evidence_behavior_specific.csv: (112540, 8)
+
+Average overlap with original (per pair):
+  A (chip transfer): 0.75 / 5.0 (15.1%)
+  B (behavior-specific): 0.69 / 5.0 (13.9%)
+
+Done in 510.2s
