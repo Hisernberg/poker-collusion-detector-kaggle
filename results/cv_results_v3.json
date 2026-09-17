@@ -1,0 +1,8 @@
+{
+  "overall_oof_ap": 0.7004479725673612,
+  "n_train": 1860,
+  "n_positives": 372,
+  "n_features": 80,
+  "n_eval": 112540,
+  "method": "3-seed ensemble, percentile risk, top-20% positive threshold, dev-distribution-weighted behavior"
+}
