@@ -1,0 +1,5 @@
+*.parquet
+*.zip
+__pycache__/
+*.pkl
+.kaggle/
