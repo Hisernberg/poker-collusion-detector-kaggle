@@ -1,0 +1,124 @@
+================================================================================
+STAGE 0 — Setup
+================================================================================
+dev_labels: (1860, 6), eval_pairs: (112540, 4)
+Total pairs: 114,400
+Players needed: 11,996
+Setup: 0.6s
+
+Loading hands.parquet...
+hands_pl: (2000000, 5), mem=94.6MB
+hands_dict: 2,000,000
+
+================================================================================
+Streaming through seats.parquet row-groups
+================================================================================
+seats.parquet: 12,000,000 rows, 200 row groups
+  row group 20/200: hands=199,607, pairs=2,044,315, buffer=393, elapsed=86.0s
+  row group 40/200: hands=399,366, pairs=4,081,776, buffer=634, elapsed=175.2s
+  row group 60/200: hands=599,246, pairs=6,127,153, buffer=754, elapsed=265.7s
+  row group 80/200: hands=798,852, pairs=8,193,834, buffer=1,148, elapsed=358.0s
+  row group 100/200: hands=998,527, pairs=10,237,159, buffer=1,473, elapsed=452.3s
+  row group 120/200: hands=1,198,158, pairs=12,301,311, buffer=1,842, elapsed=543.5s
+  row group 140/200: hands=1,398,109, pairs=14,744,138, buffer=1,891, elapsed=638.0s
+  row group 160/200: hands=1,598,031, pairs=17,189,844, buffer=1,969, elapsed=733.9s
+  row group 180/200: hands=1,797,963, pairs=19,635,684, buffer=2,037, elapsed=829.5s
+  row group 200/200: hands=1,997,923, pairs=22,087,043, buffer=2,077, elapsed=925.2s
+Streaming done in 925.3s. 2,000,000 hands, 22,101,735 pair-hand records.
+Buffer remaining: 2,077
+
+================================================================================
+Building pair-level features DataFrame
+================================================================================
+Pairs with data: 114,400
+pair_features: (114400, 65)
+pair_features final: (114400, 83)
+Saved pair_features.parquet
+
+================================================================================
+STAGE B — Train LightGBM models
+================================================================================
+Train pairs: (1860, 85), positives: 372
+# feature columns: 80
+
+--- Training directed_transfer models ---
+  fold 0: AP=0.5930, best_iter=44
+  fold 1: AP=0.7440, best_iter=75
+  fold 2: AP=0.8181, best_iter=79
+  fold 3: AP=0.6870, best_iter=63
+  fold 4: AP=0.7420, best_iter=77
+  Mean AP: 0.7168
+
+--- Training soft_play models ---
+  fold 0: AP=0.5321, best_iter=58
+  fold 1: AP=0.6624, best_iter=57
+  fold 2: AP=0.5452, best_iter=42
+  fold 3: AP=0.5713, best_iter=59
+  fold 4: AP=0.4610, best_iter=44
+  Mean AP: 0.5544
+
+--- Training coordinated_isolation models ---
+  fold 0: AP=0.1634, best_iter=4
+  fold 1: AP=0.0897, best_iter=13
+  fold 2: AP=0.0535, best_iter=1
+  fold 3: AP=0.0586, best_iter=2
+  fold 4: AP=0.1103, best_iter=2
+  Mean AP: 0.0951
+
+--- Training any_suspicious models ---
+  fold 0: AP=0.5893, best_iter=51
+  fold 1: AP=0.7142, best_iter=60
+  fold 2: AP=0.7012, best_iter=51
+  fold 3: AP=0.6297, best_iter=50
+  fold 4: AP=0.7043, best_iter=63
+  Mean AP: 0.6677
+
+Overall OOF AP (composite risk): 0.6785
+  directed_transfer OOF AP: 0.7154
+  soft_play OOF AP: 0.5402
+  coordinated_isolation OOF AP: 0.0811
+
+--- Training final models on full data ---
+Saved models
+
+================================================================================
+STAGE C — Predict on evaluation pairs
+================================================================================
+Eval pairs: (112540, 83)
+Behavior distribution: Counter({'none': 106326, 'directed_transfer': 3080, 'soft_play': 2670, 'coordinated_isolation': 464})
+
+--- Building evidence from top-5 heaps ---
+Saved submission: (112540, 8)
+         pair_id  risk_score  ...  evidence_hand_4  evidence_hand_5
+0  P00005AC2A509    0.008581  ...  H392FCB82F16534  H08BA1A1AEC0930
+1  P00055C6C3588    0.061249  ...  H319DC7801F3CA8  HF4FBF25AD0C00B
+2  P0007B4930526    0.002687  ...  HDD7237CF2E3FAD  HEEFC4AABC3C942
+3  P000841AC274F    0.002034  ...  H13980FA82BF178  H218C00FE701F61
+4  P0008F9A8AD1F    0.000779  ...  H1A5414991BE9D5  H4D4855517140D7
+
+[5 rows x 8 columns]
+
+Risk score stats:
+count    112540.000000
+mean          0.044138
+std           0.128006
+min           0.000026
+25%           0.000801
+50%           0.002890
+75%           0.015180
+max           0.999884
+Name: risk_score, dtype: float64
+
+Predicted behaviors:
+predicted_behavior
+none                     106326
+directed_transfer          3080
+soft_play                  2670
+coordinated_isolation       464
+Name: count, dtype: int64
+
+================================================================================
+DONE in 955.4s
+Submission: /home/z/my-project/kaggle/runs/submission.csv
+OOF AP: 0.6785
+================================================================================
