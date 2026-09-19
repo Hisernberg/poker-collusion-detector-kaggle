@@ -178,6 +178,8 @@ RECIPES = {
     "s2": 0.2 * pu_r + 0.8 * cats6_r,            # equal-weight cat family
     "s3": 0.15 * pu_r + 0.75 * cats6_r + 0.10 * sub_r,
     "s4": 0.3 * pu_r + 0.7 * cat_d6_r,           # d6 ladder probe
+    "s5a": 0.5 * (0.4 * pu_r + 0.6 * cat_d5_r) + 0.5 * (0.2 * pu_r + 0.8 * cats6_r),   # rank-avg s1+s2
+    "s5b": 0.5 * (0.4 * pu_r + 0.6 * cat_d5_r) + 0.5 * (0.15 * pu_r + 0.75 * cats6_r + 0.10 * sub_r),  # rank-avg s1+s3
 }
 assert RISK_RECIPE in RECIPES, RISK_RECIPE
 risk = RECIPES[RISK_RECIPE]
